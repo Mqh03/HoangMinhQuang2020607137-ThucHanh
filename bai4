@@ -1,0 +1,32 @@
+import csv
+import tkinter as tk
+from tkinter import filedialog
+
+def tao_bao_cao():
+    file_path = filedialog.askopenfilename(filetypes=[('CSV Files', '*.csv')])
+
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file)
+        header = next(reader)
+
+        # Xóa nội dung cũ trong khung hiển thị
+        text_box.delete('1.0', tk.END)
+
+        # Hiển thị các tiêu đề cột
+        text_box.insert(tk.END, " | ".join(header) + '\n')
+
+        # Hiển thị dữ liệu từng hàng
+        for row in reader:
+            text_box.insert(tk.END, " | ".join(row) + '\n')
+# Tạo cửa sổ giao diện
+window = tk.Tk()
+window.title("Chương trình tạo báo cáo")
+
+# Tạo nút "Chọn tệp" để chọn tệp CSV
+select_button = tk.Button(window, text="Chọn tệp", command=tao_bao_cao)
+select_button.pack()
+# Tạo khung hiển thị dữ liệu
+text_box = tk.Text(window)
+text_box.pack()
+# Chạy giao diện chương trình
+window.mainloop()
