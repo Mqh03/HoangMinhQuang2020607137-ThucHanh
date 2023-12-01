@@ -1,0 +1,57 @@
+import math
+import tkinter as tk
+
+def is_triangle_valid(a, b, c):
+    if a + b > c and a + c > b and b + c > a:
+        return True
+    return False
+
+def calculate_area_of_triangle(a, b, c):
+    s = (a + b + c) / 2
+    return math.sqrt(s * (s - a) * (s - b) * (s - c))
+
+def calculate_button_clicked():
+    a = float(a_entry.get())
+    b = float(b_entry.get())
+    c = float(c_entry.get())
+
+    if is_triangle_valid(a, b, c):
+        result_label["text"] = "Tam giác này hợp lệ"
+        area = calculate_area_of_triangle(a, b, c)
+        area_label["text"] = "Diện tích tam giác là: {:.2f}".format(area)
+    else:
+        result_label["text"] = "Tam giác này không hợp lệ"
+        area_label["text"] = ""
+
+# Tạo cửa sổ giao diện
+window = tk.Tk()
+window.title("Tính diện tích tam giác")
+window.geometry("300x200")
+
+# Tạo các thành phần giao diện
+a_label = tk.Label(window, text="Cạnh a:")
+a_label.pack()
+a_entry = tk.Entry(window)
+a_entry.pack()
+
+b_label = tk.Label(window, text="Cạnh b:")
+b_label.pack()
+b_entry = tk.Entry(window)
+b_entry.pack()
+
+c_label = tk.Label(window, text="Cạnh c:")
+c_label.pack()
+c_entry = tk.Entry(window)
+c_entry.pack()
+
+calculate_button = tk.Button(window, text="Tính", command=calculate_button_clicked)
+calculate_button.pack()
+
+result_label = tk.Label(window, text="")
+result_label.pack()
+
+area_label = tk.Label(window, text="")
+area_label.pack()
+
+# Khởi chạy giao diện
+window.mainloop()
