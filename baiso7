@@ -1,0 +1,63 @@
+import cv2
+import numpy as np
+
+class App:
+
+    def __init__(self):
+        # Khởi tạo giao diện người dùng
+        self.window = Tk()
+        self.canvas = Canvas(self.window)
+        self.label = Label(self.window, text='Ảnh')
+
+        # Khởi tạo thư viện xử lý ảnh
+        self.cv2 = cv2
+
+        # Tạo bộ lọc Gaussian blur
+        self.kernel = np.array([[1, 2, 1], [2, 4, 2], [1, 2, 1]]) / 16
+
+    def load_image(self):
+        # Mở file ảnh
+        file_name = filedialog.askopenfilename(filetypes=[('Ảnh', '*.jpg')])
+
+        # Đọc ảnh
+        image = cv2.imread(file_name)
+
+        # Hiển thị ảnh
+        self.image = image
+        self.canvas.create_image((0, 0), image=self.image)
+        self.label.config(text=file_name)
+
+    def apply_filter(self, filter_type):
+        # Lấy kích thước kernel
+        kernel_size = self.kernel.shape[0]
+
+        # Áp dụng bộ lọc
+        if filter_type == 'Gaussian':
+            image = cv2.GaussianBlur(self.image, (kernel_size, kernel_size), 0)
+        elif filter_type == 'Median':
+            image = cv2.medianBlur(self.image, kernel_size)
+        elif filter_type == 'Average':
+            image = cv2.blur(self.image, (kernel_size, kernel_size))
+
+        # Hiển thị ảnh
+        self.image = image
+        self.canvas.create_image((0, 0), image=self.image)
+        self.label.config(text=filter_type)
+
+    def mainloop(self):
+        # Khởi tạo giao diện người dùng
+        self.window.title('Lọc làm mịn ảnh')
+        self.window.geometry('640x480')
+
+        # Thêm các nút điều khiển
+        Button(self.window, text='Mở ảnh', command=self.load_image).pack()
+        Label(self.window, text='Loại bộ lọc: ').pack()
+        OptionMenu(self.window, '', 'Gaussian', 'Median', 'Average').pack()
+        Button(self.window, text='Áp dụng', command=self.apply_filter).pack()
+
+        # Khởi động giao diện người dùng
+        self.window.mainloop()
+
+if __name__ == '__main__':
+    app = App()
+    app.mainloop()
