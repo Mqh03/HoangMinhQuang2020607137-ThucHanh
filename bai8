@@ -1,0 +1,41 @@
+import cv2
+
+def canny_edge_detection(image):
+  """
+  Thực hiện tách biên ảnh bằng thuật toán Canny.
+
+  Args:
+    image: Ảnh nguồn.
+
+  Returns:
+    Ảnh biên.
+  """
+
+  # Chuyển ảnh nguồn sang ảnh xám.
+  gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+  # Tính toán gradien của ảnh xám.
+  sobel_x = cv2.Sobel(gray_image, cv2.CV_8U, 1, 0)
+  sobel_y = cv2.Sobel(gray_image, cv2.CV_8U, 0, 1)
+
+  # Loại bỏ các điểm nhiễu trong ảnh.
+  threshold_value = 100
+  edge_image = cv2.threshold(sobel_x + sobel_y, threshold_value, 255, cv2.THRESH_BINARY)
+
+  # Lọc biên của ảnh.
+  aperture_size = 3
+  canny_edge_image = cv2.Canny(edge_image, 50, 200, aperture_size)
+
+  return canny_edge_image
+
+if __name__ == "__main__":
+  # Nhập ảnh nguồn từ người dùng.
+  image_path = input("Nhập đường dẫn ảnh nguồn: ")
+  image = cv2.imread(image_path)
+
+  # Tách biên ảnh.
+  canny_edge_image = canny_edge_detection(image)
+
+  # Hiển thị ảnh biên.
+  cv2.imshow("Ảnh biên", canny_edge_image)
+  cv2.waitKey(0)
